@@ -103,7 +103,6 @@ function parser(args) {
   }
 
   parsedObject.output = sanitizeDirectory(parsedObject.output);
-  console.log(parsedObject.output);
 
   if (parsedObject.output && !parsedObject.output.endsWith(path.sep)) {
     parsedObject.output = `${parsedObject.output}${path.sep}`;
