@@ -1,5 +1,14 @@
 const path = require('path');
 
+function oppositeSeperatorPattern() {
+  return path.sep === '/' ? /\\/g : /\//g;
+}
+
+function sanitizeDirectory(pathToSanitize) {
+  let oppositePattern = oppositeSeperatorPattern();
+  return pathToSanitize.replace(oppositePattern, path.sep);
+}
+
 function getOption(option) {
   switch (option.toLowerCase()) {
     case '-u':
@@ -22,7 +31,7 @@ function getOption(option) {
 }
 
 function getValueByOption(option, value) {
-  switch(option.toLowerCase()) {
+  switch (option.toLowerCase()) {
     case 'url': {
       if (!value.startsWith('https://www.youtube.com')) {
         throw new SyntaxError('URL must be valid YouTube link!');
@@ -31,7 +40,7 @@ function getValueByOption(option, value) {
       return value;
     }
     case 'format': {
-      if (value !== 'mp4' && value !== 'mp3' && value !== '0' && value !== '1') {
+      if (!['mp4', 'mp3', '0', '1'].includes(value)) {
         throw new SyntaxError('Format must be one of this options [mp4, mp3, 0, 1]!');
       }
 
@@ -46,7 +55,7 @@ function getValueByOption(option, value) {
       return value;
     }
     case 'list': {
-      if (value !== 'false' && value !== 'true' && value !== '0' && value !== '1') {
+      if (!['false', 'true', '0', '1'].includes(value)) {
         throw new SyntaxError('List must be one of this options [false, true, 0, 1]!');
       }
 
@@ -84,15 +93,22 @@ function parser(args) {
     let value = getValueByOption(option, args[i + 1]);
     parsedObject[option] = value;
   }
-  
+
+  if (!parsedObject.url) {
+    throw new SyntaxError('URL parameter is required!');
+  }
+
   if (!parsedObject.output) {
     parsedObject.output = './output/';
   }
-  
+
+  parsedObject.output = sanitizeDirectory(parsedObject.output);
+  console.log(parsedObject.output);
+
   if (parsedObject.output && !parsedObject.output.endsWith(path.sep)) {
     parsedObject.output = `${parsedObject.output}${path.sep}`;
   }
-  
+
   if (!parsedObject.format) {
     parsedObject.format = 'mp4';
   }

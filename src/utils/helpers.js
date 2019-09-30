@@ -34,7 +34,7 @@ function onLoadedPage(ev) {
     }
 
     const currentIndexLength = `${i + 1}`.length;
-    const currentIndex = `${'0'.repeat((countLength - currentIndexLength))}${i + 1}`;
+    const currentIndex = `${'0'.repeat(countLength - currentIndexLength)}${i + 1}`;
     promises.push(downloadFile(href, `${currentIndex} - `));
   }
 
