@@ -6,7 +6,12 @@ function oppositeSeperatorPattern() {
 
 function sanitizeDirectory(pathToSanitize) {
   let oppositePattern = oppositeSeperatorPattern();
-  return pathToSanitize.replace(oppositePattern, path.sep);
+  pathToSanitize = pathToSanitize.replace(oppositePattern, path.sep);
+  if (!pathToSanitize.endsWith(path.sep)) {
+    pathToSanitize = `${pathToSanitize}${path.sep}`;
+  }
+
+  return pathToSanitize;
 }
 
 function getOption(option) {
@@ -99,15 +104,10 @@ function parser(args) {
   }
 
   if (!parsedObject.output) {
-    parsedObject.output = './output/';
+    parsedObject.output = './output';
   }
 
   parsedObject.output = sanitizeDirectory(parsedObject.output);
-
-  if (parsedObject.output && !parsedObject.output.endsWith(path.sep)) {
-    parsedObject.output = `${parsedObject.output}${path.sep}`;
-  }
-
   if (!parsedObject.format) {
     parsedObject.format = 'mp4';
   }
