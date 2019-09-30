@@ -1,5 +1,4 @@
-let downloadFile = null;
-let resolveOneByOne = null;
+const { downloadFile, resolveOneByOne } = require('./resolvers');
 
 function onLoadedPage(ev) {
   let promises = [];
@@ -41,8 +40,4 @@ function onLoadedPage(ev) {
   resolveOneByOne(promises);
 }
 
-module.exports = (resolvers) => {
-  downloadFile = resolvers.downloadFile;
-  resolveOneByOne = resolvers.resolveOneByOne;
-  return onLoadedPage;
-};
+module.exports = { onLoadedPage };

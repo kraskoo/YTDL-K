@@ -3,12 +3,8 @@ const readline = require('readline');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
 const ytdl = require('ytdl-core');
+const parameters = require('./parameters');
 let totalMB = 0;
-let parameters = {};
-
-function modifyParameters(params) {
-  parameters = params;
-}
 
 function downloadFile(url, listIndex = '') {
   let urlParts = url.split('&');
@@ -48,18 +44,14 @@ function downloadFile(url, listIndex = '') {
 
 async function resolveOneByOne(promises) {
   if (!Array.isArray(promises)) {
+    promises = [ promises ];
+  }
+  
+  for (let i = 0; i < promises.length; i++) {
     try {
-      await resolveObject(promises);
+      await resolveObject(promises[i], promises.length);
     } catch (err) {
       console.error(err);
-    }
-  } else {
-    for (let i = 0; i < promises.length; i++) {
-      try {
-        await resolveObject(promises[i], promises.length);
-      } catch (err) {
-        console.error(err);
-      }
     }
   }
 
@@ -77,7 +69,7 @@ async function resolveObject(obj, length = 1) {
     console.log(`[${index.replace(' - ', '')} of ${length}]...`);
     let info = await obj.promise();
     try {
-      let index = obj.index;
+      index = obj.index;
       let videoFile = await resolveInfo(info, id, index);
       if (parameters.format === 'mp3') {
         fs.unlink(videoFile, err => {
@@ -121,10 +113,11 @@ function resolveInfo(info, id, listIndex = '') {
           console.log('Converting...');
           ffmpeg(fs.createReadStream(videoFile))
             .setFfmpegPath(ffmpegPath)
-            .output(fs.createWriteStream(audioFile))
+            .fromFormat('mp4')
             .noVideo()
-            .format('mp3')
-            .outputOptions(['-ab', '192k'])
+            .outputOptions(['-b:a 192k'])
+            .output(fs.createWriteStream(audioFile))
+            .toFormat('mp3')
             .on('error', reject)
             .on('progress', progress => {
               readline.cursorTo(process.stdout, 0);
@@ -143,11 +136,4 @@ function resolveInfo(info, id, listIndex = '') {
   });
 }
 
-module.exports = (params) => {
-  modifyParameters(params);
-  return {
-    downloadFile,
-    resolveOneByOne,
-    modifyParameters
-  };
-};
+module.exports = { downloadFile, resolveOneByOne };
