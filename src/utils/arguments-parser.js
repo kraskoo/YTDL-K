@@ -36,9 +36,8 @@ function getOption(option) {
 }
 
 function getValueByOption(option, value) {
-  switch (option.toLowerCase()) {
+  switch (option) {
     case 'url': {
-      console.log('url');
       if (!value.startsWith('https://www.youtube.com/')) {
         throw new SyntaxError('URL must be valid YouTube link!');
       }
@@ -46,7 +45,6 @@ function getValueByOption(option, value) {
       return value;
     }
     case 'format': {
-      console.log('format');
       if (!['mp4', 'mp3', '0', '1'].includes(value)) {
         throw new SyntaxError('Format must be one of this options [mp4, mp3, 0, 1]!');
       }
@@ -61,8 +59,7 @@ function getValueByOption(option, value) {
 
       return value;
     }
-    case 'list': {      
-      console.log('list');
+    case 'list': {
       if (!['false', 'true', '0', '1'].includes(value)) {
         throw new SyntaxError('List must be one of this options [false, true, 0, 1]!');
       }
@@ -78,8 +75,8 @@ function getValueByOption(option, value) {
       return value;
     }
     case 'trackNumber': {
-      if (value.match(/^[0-9a-zA-Z]{1,8}$/g) === null) {
-        throw new SyntaxError(`Prefix must contains only numbers, latin alphabets and must be in range [1.. 8]!`);
+      if (value.match(/^[#№0-9a-zA-Z]{1,8}$/g) === null) {
+        throw new SyntaxError(`Prefix must contains only numbers, latin alphabets, symbols: ['#', '№'] and must be in range [1.. 8]!`);
       }
 
       return value;
