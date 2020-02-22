@@ -1,6 +1,6 @@
 {
   "name": "YTDL-K",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,6 +13,6 @@
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "fluent-ffmpeg": "^2.1.2",
     "jsdom": "^15.2.1",
-    "ytdl-core": "^1.0.7"
+    "ytdl-core": "^1.0.9"
   }
 }
