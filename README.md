@@ -30,3 +30,4 @@ Download video or whole playlist, can convert to mp3
 	node index --url "https://www.youtube.com/watch?v=dp7D-nAS2WY" --track-number "01",
 	node index -u "https://www.youtube.com/watch?v=dp7D-nAS2WY&list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws" -l "true",
 	node index --url "https://www.youtube.com/playlist?list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws" -l "true" -o "D:\"
+	node index --url "https://www.youtube.com/playlist?list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws" -l "true" -s 35
