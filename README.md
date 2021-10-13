@@ -24,6 +24,7 @@ Download video or whole playlist, can convert to mp3
 	        -tn, --track-number <Prefix> - prefixes: add number or anything else to the title of track - default: empty
 	                Important: Will not work for playlists
 	        -o, --output <Path> - path: working directory for the app - default: './output'
+			-s, --skip <Number> - Skip N tracks from playlist
 ### Examples:
 	node index -u "https://www.youtube.com/watch?v=dp7D-nAS2WY&list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws",
 	node index --url "https://www.youtube.com/watch?v=dp7D-nAS2WY" --track-number "01",

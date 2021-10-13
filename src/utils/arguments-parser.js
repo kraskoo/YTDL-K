@@ -16,6 +16,9 @@ function sanitizeDirectory(pathToSanitize) {
 
 function getOption(option) {
   switch (option.toLowerCase()) {
+    case '-s':
+    case '--skip':
+      return 'skip';
     case '-u':
     case '--url':
       return 'url';
@@ -77,6 +80,14 @@ function getValueByOption(option, value) {
     case 'trackNumber': {
       if (value.match(/^[#№0-9a-zA-Z]{1,8}$/g) === null) {
         throw new SyntaxError(`Prefix must contains only numbers, latin alphabets, symbols: ['#', '№'] and must be in range [1.. 8]!`);
+      }
+
+      return value;
+    }
+    case 'skip': {
+      value = parseInt(value);
+      if (!Number.isInteger(value)) {
+        throw new SyntaxError(`Skip option must be integer number`);
       }
 
       return value;

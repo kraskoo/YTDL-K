@@ -14,11 +14,13 @@ const help = [
   `\t\t-tn, --track-number <Prefix> - prefixes: add number or anything else to the title of track - default: empty`,
   `\t\t\tImportant: Will not work for playlists`,
   `\t\t-o, --output <Path> - path: working directory for the app - default: './output'`,
+  `\t\t-s, --skip <Number> - Skip N tracks from playlist`,
   'Examples:',
   `\tnode index -u "https://www.youtube.com/watch?v=dp7D-nAS2WY&list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws",`,
   `\tnode index --url "https://www.youtube.com/watch?v=dp7D-nAS2WY" --track-number "01",\n`,
   `\tnode index -u "https://www.youtube.com/watch?v=dp7D-nAS2WY&list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws" -l "true",`,
-  `\tnode index --url "https://www.youtube.com/playlist?list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws" -l "true" -o "D:\\"`
+  `\tnode index --url "https://www.youtube.com/playlist?list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws" -l "true" -o "D:\\"`,
+  `\tnode index --url "https://www.youtube.com/playlist?list=PLX_17zp0nBu8yW3dhLyRVG_dQDHUUc-ws" -l "true" -s 35`
 ];
 
 function info() {

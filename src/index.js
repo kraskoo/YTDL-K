@@ -25,7 +25,7 @@ let urlQueryList = parameters.url
 
   const urls = responses.map(r => r.items.map(i => i.shortUrl)).flat();
   const promises = [];
-  for (let i = 0; i < urls.length; i++) {
+  for (let i = parameters.skip ? parameters.skip - 1 : 0; i < urls.length; i++) {
     const currentIndexLength = `${i + 1}`.length;
     const currentIndex = `${'0'.repeat(`${urls.length}`.length - currentIndexLength)}${i + 1}`;
     promises.push(downloadFile(urls[i], `${currentIndex} - `));
