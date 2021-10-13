@@ -17,7 +17,7 @@ function sanitizeDirectory(pathToSanitize) {
 function getOption(option) {
   switch (option.toLowerCase()) {
     case '-u':
-    case '-url':
+    case '--url':
       return 'url';
     case '-f':
     case '--format':

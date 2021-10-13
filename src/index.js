@@ -1,30 +1,26 @@
-const https = require('https');
-const jsdom = require('jsdom');
+const ytpl = require('ytpl');
 const parameters = require('./utils/parameters');
 const { downloadFile, resolveOneByOne } = require('./utils/resolvers');
-const { onLoadedPage } = require('./utils/helpers');
 
 if (!parameters.list) {
   resolveOneByOne(downloadFile(parameters.url, parameters.trackNumber ? parameters.trackNumber : ''));
   return;
 }
 
-let chunks = '';
 let urlQueryList = parameters.url
   .split('?')[1]
   .split('&')
-  .filter(x => x.startsWith('list='))[0];
-let playListUrl = `https://www.youtube.com/playlist?${urlQueryList}`;
-https.get(playListUrl, res => {
-  if (res.statusCode === 200) {
-    res.on('data', data => {
-      chunks += data;
-    }).on('end', function () {
-      let dom = new jsdom.JSDOM(chunks);
-      let window = dom.window;
-      window.addEventListener('load', onLoadedPage);
-    });
-  } else {
-    console.log(`Status code: ${res.statusCode}\n${res.statusMessage}`);
-  }
-}).on('error', console.error);
+  .filter(x => x.startsWith('list='))[0]
+  .split('=')[1];
+ytpl(urlQueryList)
+  .then(res => {
+    var urls = res.items.map(tn => tn.shortUrl);
+    var promises = [];
+    for (let i = 0; i < urls.length; i++) {
+      const currentIndexLength = `${i + 1}`.length;
+      const currentIndex = `${'0'.repeat(`${urls.length}`.length - currentIndexLength)}${i + 1}`;
+      promises.push(downloadFile(urls[i], `${currentIndex} - `));
+    }
+    
+    resolveOneByOne(promises);
+  }).catch(console.error);

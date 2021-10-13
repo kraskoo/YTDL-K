@@ -20,15 +20,9 @@ function downloadFile(url, listIndex = '') {
 
   if (id !== '') {
     return {
-      promise: () => new Promise((res, rej) => {
-        ytdl.getInfo(url, (err, info) => {
-          if (err) {
-            rej(err);
-            return;
-          }
-
-          res(info, id, listIndex);
-        });
+      promise: () => new Promise(async (res, rej) => {
+        let info = await ytdl.getInfo(url);
+        res(info, id, listIndex);
       }),
       id,
       index: listIndex
