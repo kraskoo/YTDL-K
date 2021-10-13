@@ -12,15 +12,24 @@ let urlQueryList = parameters.url
   .split('&')
   .filter(x => x.startsWith('list='))[0]
   .split('=')[1];
-ytpl(urlQueryList)
-  .then(res => {
-    var urls = res.items.map(tn => tn.shortUrl);
-    var promises = [];
-    for (let i = 0; i < urls.length; i++) {
-      const currentIndexLength = `${i + 1}`.length;
-      const currentIndex = `${'0'.repeat(`${urls.length}`.length - currentIndexLength)}${i + 1}`;
-      promises.push(downloadFile(urls[i], `${currentIndex} - `));
-    }
-    
-    resolveOneByOne(promises);
-  }).catch(console.error);
+(async function () {
+  const responses = [];
+  const first = await ytpl(urlQueryList, { pages: 1 });
+  const length = first.continuation.filter(c => typeof c === 'string').length - 1;
+  responses.push(first);
+  let next = first;
+  for (let i = 0; i < length; i++) {
+    next = await ytpl.continueReq(next.continuation);
+    responses.push(next);
+  }
+
+  const urls = responses.map(r => r.items.map(i => i.shortUrl)).flat();
+  const promises = [];
+  for (let i = 0; i < urls.length; i++) {
+    const currentIndexLength = `${i + 1}`.length;
+    const currentIndex = `${'0'.repeat(`${urls.length}`.length - currentIndexLength)}${i + 1}`;
+    promises.push(downloadFile(urls[i], `${currentIndex} - `));
+  }
+  
+  resolveOneByOne(promises);
+}())
