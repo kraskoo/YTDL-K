@@ -31,5 +31,5 @@ let urlQueryList = parameters.url
     promises.push(downloadFile(urls[i], `${currentIndex} - `));
   }
   
-  resolveOneByOne(promises);
+  resolveOneByOne(promises, urls.length);
 }())

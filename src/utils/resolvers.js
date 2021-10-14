@@ -36,14 +36,14 @@ function downloadFile(url, listIndex = '') {
   }
 }
 
-async function resolveOneByOne(promises) {
+async function resolveOneByOne(promises, originalLength = null) {
   if (!Array.isArray(promises)) {
     promises = [ promises ];
   }
   
   for (let i = 0; i < promises.length; i++) {
     try {
-      await resolveObject(promises[i], promises.length);
+      await resolveObject(promises[i], promises.length, originalLength);
     } catch (err) {
       console.error(err);
     }
@@ -52,7 +52,7 @@ async function resolveOneByOne(promises) {
   console.log(`Total downloaded: ${(totalMB / 1024 / 1024).toFixed(2)}MB`);
 }
 
-async function resolveObject(obj, length = 1) {
+async function resolveObject(obj, length = 1, originalLength = null) {
   try {
     let id = obj.id;
     let index = obj.index;
@@ -60,7 +60,7 @@ async function resolveObject(obj, length = 1) {
       index = '1';
     }
 
-    console.log(`[${index.replace(' - ', '')} of ${length}]...`);
+    console.log(`[${index.replace(' - ', '')} of ${originalLength ? originalLength : length}]...`);
     let info = await obj.promise();
     try {
       index = obj.index;
